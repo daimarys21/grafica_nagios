@@ -1,0 +1,35 @@
+Install Note 
+---------------------------- 
+1.You must installed pnp4nagios above 0.6.x, NOT WORK with 0.4.x
+2.Download highcharts4nagios.tar, untar to ex:/usr/local/highcharts/
+3.Modify httpd.conf, see the sample.
+4.Add Nagios service config with action_url or notes_url to 
+  ex: 
+  notes_url /highcharts/highcharts.html?host=$HOSTNAME$&srv=$SERVICEDESC$ 
+5.Restart httpd and nagios.
+
+
+Service EXAMPLE:
+---------------------------- 
+define service{
+        use                     linux-server
+        service_description     JvmUsage
+        host_name               SAS
+        contact_groups          OP
+        process_perf_data       1
+        check_command           JVM
+        action_url /pnp4nagios/index.php/graph?host=$HOSTNAME$&srv=$SERVICEDESC$' class='tips' rel='/pnp4nagios/popup?host=$HOSTNAME$&srv=$SERVICEDESC$
+        notes_url /highcharts/highcharts.html?host=$HOSTNAME$&srv=$SERVICEDESC$'
+        }
+
+Httpd config EXAMPLE:
+---------------------------- 
+Alias /highcharts "/usr/local/highcharts"
+<Directory "/usr/local/highcharts">   //Highcharts ­¶­±¥Ø¿ý
+    Options None
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+##  Only for apache 2.4 ##
+#   Require all granted
+</Directory>
